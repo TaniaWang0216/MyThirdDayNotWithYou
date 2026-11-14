@@ -334,7 +334,7 @@
       flex-direction: column;
       align-items: center;
       gap: 32px;
-      animation: letterScroll 120s linear infinite
+      animation: letterScroll 130s linear infinite
     }
 
     .message-track .message {
@@ -583,7 +583,7 @@
               在前半年其實我一直問妳：
               我可不可以在平日出國，
               但妳始終都沒有正面回答我這個問題，
-              然後又因為我們鬧得很不愉快，
+              然後又因為我們連續得吵架，
               所以我想讓妳跟我都知道
               我不在這麼久到底對妳有沒有差。
 
@@ -591,23 +591,24 @@
               其實心中曾經期待
               妳會不會問我要不要去跟妳巧遇，
 			  可惜沒有，
-              老實說心裡是有點小失落
-
               但我也要感謝妳，
               讓我終於去嘗試獨旅，
               雖然其實有一半是蹭姐姐家的行程～
 
-              不過要是我這次真的決定要出國三天
+              不過要是我這次是出國三天
               再加上後面兩天八九連動，
               我們10天沒見面的話，
-              到底會不會發生什麼事😂
+              回來會不會有人取代我在妳心中的地位😰
 
-              好啦～老樣子的感性時間，
+              老樣子的感性時間～
               見字如晤，
               希望我留下的這封信，
               能讓妳感覺到
               我還是陪在妳身邊❤️
-              想我的時候，就來這裡看看。
+			  即使在異國或是異地，
+			  都依然想念。
+              如果妳也會有想我的時候，
+			  就來這裡看看吧！
 
               項鍊我從來沒拿下來過，
               因為我一直都把妳放在心上。❤️</div>
@@ -622,7 +623,7 @@
               在前半年其實我一直問妳：
               我可不可以在平日出國，
               但妳始終都沒有正面回答我這個問題，
-              然後又因為我們鬧得很不愉快，
+              然後又因為我們連續得吵架，
               所以我想讓妳跟我都知道
               我不在這麼久到底對妳有沒有差。
 
@@ -630,23 +631,24 @@
               其實心中曾經期待
               妳會不會問我要不要去跟妳巧遇，
 			  可惜沒有，
-              老實說心裡是有點小失落
-
               但我也要感謝妳，
               讓我終於去嘗試獨旅，
               雖然其實有一半是蹭姐姐家的行程～
 
-              不過要是我這次真的決定要出國三天
+              不過要是我這次是出國三天
               再加上後面兩天八九連動，
               我們10天沒見面的話，
-              到底會不會發生什麼事😂
+              回來會不會有人取代我在妳心中的地位😰
 
-              好啦～老樣子的感性時間，
+              老樣子的感性時間～
               見字如晤，
               希望我留下的這封信，
               能讓妳感覺到
               我還是陪在妳身邊❤️
-              想我的時候，就來這裡看看。
+			  即使在異國或是異地，
+			  都依然想念。
+              如果妳也會有想我的時候，
+			  就來這裡看看吧！
 
               項鍊我從來沒拿下來過，
               因為我一直都把妳放在心上。❤️</div>
@@ -673,65 +675,79 @@
         <div class="reveal" id="secret">一日不見，如隔三秋。❤️</div>
       </div>
       <div class="actions"><button class="btn primary" id="secretBtn">送我一句悄悄話</button><button class="btn"
-          onclick="window.scrollTo({top:0,behavior:'smooth'})">回到最上面 ↑</button></div>
+          id="backToTop">回到最上面 ↑</button></div>
       <div class="next-step"><button class="btn primary" id="finishBtn">完成這趟小小旅程♡</button></div>
     </section>
   </main>
   <footer><strong>不管我在哪裡，妳都可以來這裡找我。♡</strong>這個小角落，永遠留一個位置給妳。<br><br>Made with love, just for you.</footer>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
-    const envelope = document.getElementById('envelope');
+    $(function () {
+      const $envelope = $('#envelope');
+      const $sections = $('main section');
+      let letterOpened = false;
 
-    function openLetter() {
-      envelope.classList.add('open');
-      document.getElementById('hint').textContent = '信已經為妳打開了 ♡';
-    }
-    envelope.addEventListener('click', openLetter);
-    envelope.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openLetter();
+      function revealSection(index) {
+        if (index < $sections.length) {
+          const $section = $sections.eq(index);
+          $section.addClass('unlocked');
+          setTimeout(function () {
+            $('html, body').animate({ scrollTop: $section.offset().top }, 600);
+          }, 120);
+        }
       }
-    });
-    const sections = [...document.querySelectorAll('main section')];
 
-    function revealSection(index) {
-      if (index < sections.length) {
-        sections[index].classList.add('unlocked');
-        setTimeout(() => sections[index].scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        }), 120);
+      function openLetter() {
+        if (letterOpened) return;
+        letterOpened = true;
+
+        $envelope.addClass('open');
+        $('#hint').text('信已經為妳打開了 ♡');
+
+        // 信封動畫結束後，自動解鎖並跳到第一段內容
+        setTimeout(function () {
+          revealSection(0);
+        }, 850);
       }
-    }
-    document.getElementById('enter').addEventListener('click', () => {
-      openLetter();
-      setTimeout(() => revealSection(0), 650);
-    });
-    document.querySelectorAll('.next-btn').forEach((button, index) => {
-      button.addEventListener('click', () => revealSection(index + 1));
-    });
-    document.getElementById('finishBtn').addEventListener('click', () => {
-      document.getElementById('finishBtn').textContent = '這份心意會一直為妳留著💛';
-      document.getElementById('finishBtn').disabled = true;
-    });
-    //const quotes = ['「妳已經很努力了，今天也值得被好好疼愛。」', '「不用每一天都很勇敢，偶爾休息也沒關係。」', '「希望妳記得，妳一直都是很棒、很值得被愛的人。」',
-    //  '「先照顧好自己的心情，其他事情我們慢慢來。」', '「不管今天發生什麼，明天都還有新的可能。」', '「如果累了，就停下來喝口水，給自己一個抱抱。」'
-    //];
-    //document.getElementById('newQuote').addEventListener('click', () => {
-    //  const el = document.getElementById('quote');
-    //  el.style.opacity = 0;
-    //  setTimeout(() => {
-    //    el.textContent = quotes[Math.floor(Math.random() * quotes.length)];
-    //    el.style.opacity = 1;
-    //  }, 220);
-    //});
-    const secrets = ['想我的時候，傳訊息給我唄🧡', '謝謝妳出現在我的生命裡❤️', '我們還有好多地方要一起去、好多餐廳要一起吃～',
-      '距離只是地圖上的一段路，不是我們的距離。', '今天也要記得吃飯、想我、好好睡覺。', '乖乖等我回來哦！'
-    ];
-    document.getElementById('secretBtn').addEventListener('click', () => {
-      document.getElementById('secret').textContent = secrets[Math.floor(Math.random() * secrets.length)];
-    });
 
+      // 點擊信封或開場按鈕，都會打開信封並自動跳到第一段
+      $envelope.on('click', openLetter);
+      $envelope.on('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openLetter();
+        }
+      });
+      $('#enter').on('click', openLetter);
+
+      $('.next-btn').each(function (index) {
+        $(this).on('click', function () {
+          revealSection(index + 1);
+        });
+      });
+
+      $('#finishBtn').on('click', function () {
+        $(this).text('這份心意會一直為妳留著💛').prop('disabled', true);
+      });
+
+      const secrets = [
+        '想我的時候，傳訊息給我唄🧡',
+        '謝謝妳出現在我的生命裡❤️',
+        '我們還有好多地方要一起去、好多餐廳要一起吃～',
+        '距離只是地圖上的一段路，不是我們的距離。',
+        '今天也要記得吃飯、想我、好好睡覺。',
+        '乖乖等我回來哦！'
+      ];
+
+      $('#secretBtn').on('click', function () {
+        const randomIndex = Math.floor(Math.random() * secrets.length);
+        $('#secret').text(secrets[randomIndex]);
+      });
+
+      $('#backToTop').on('click', function () {
+        $('html, body').animate({ scrollTop: 0 }, 600);
+      });
+    });
   </script>
 </body>
 
